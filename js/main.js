@@ -1,20 +1,31 @@
-const examinationOfLineLength = function (comment, length) {
-  const lengthOfComment = comment.length;
-  if (lengthOfComment <= length) {
-    return true;
-  }
-  return false;
-};
+const checkStringLength = (comment = '', length = 0) => comment.length <= length;
 
-examinationOfLineLength();
+checkStringLength('Тут мог быть ваш комментарий', 140);
 
-const text = 'Пожалуйста, введите два неотрицательных числа для создания диапазона, от меньшего к большему';
 const getRandomInteger = function (min, max) {
-  if (min >= 0 && min < max) {
-    const integer = min + Math.random() * (max + 1 - min);
-    return Math.floor(integer);
+  if ((typeof min !== 'number' && typeof max !== 'number')|| (min < 0 && max < 0)) {
+    return null;
   }
-  return (min === max) ? min : text;
+
+  if (min < 0) {
+    min = 0;
+  }
+
+  if (max < 0) {
+    max = 0;
+  }
+
+  if (min === max) {
+    return Math.floor(min);
+  }
+
+  if (min > max) {
+    [min, max] = [max, min];
+  }
+
+  min = Math.ceil(min);
+  max = Math.floor(max);
+  return Math.floor(min + Math.random() * (max + 1 - min));
 };
 
 getRandomInteger();
