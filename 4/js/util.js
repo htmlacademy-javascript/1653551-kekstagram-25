@@ -29,8 +29,6 @@ const getArrayRandomElement = function (array) {
   return array[getRandomInteger(0, array.length - 1)];
 };
 
-const checkStringLength = (comment = '', length = 0) => comment.length <= length;
-
 /**
  * Возвращает перемешанную копию исходного массива
  * @param {Array} array - исходный массив
@@ -47,4 +45,4 @@ const generateIntId = function (start = 0, maxStep = 1) {
   };
 };
 
-export {getRandomInteger, getArrayRandomElement, checkStringLength, shuffleArray, generateIntId};
+export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId};
