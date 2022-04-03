@@ -1,6 +1,7 @@
-import { makePost } from './generate-posts';
-import { drawMiniatures } from './draw-miniatures';
+import { makePosts } from './generate-posts.js';
+import { renderThumbnails } from './draw-miniatures.js';
+import { POSTS_COUNT } from './constants.js';
 
 //Основная логика
 //Запуск основной логики
-drawMiniatures(makePost());
+renderThumbnails(makePosts(POSTS_COUNT));
