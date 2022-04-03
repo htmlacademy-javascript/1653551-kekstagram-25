@@ -1,16 +1,18 @@
-const usersPictures = document.querySelector('.pictures');
-const pictureTemplate = document.querySelector('#picture');
-const picturesFragment = document.createDocumentFragment();
+// @ts-nocheck
+const thumbnailsContainer = document.querySelector('.pictures');
+const thumbnailTemplateElement = document.querySelector('#picture');
+const thumbnailTemplate = thumbnailTemplateElement.content.querySelector('.picture'); //копируем ссылку с классом picture из шаблона
 
-const drawMiniatures = function (picturesArray) {
-  for (let i = 0; i < picturesArray.length; i++) {
-    const miniature = pictureTemplate.cloneNode(true);
-    miniature.querySelector('.picture__img').src = url;
-    miniature.querySelector('.picture__likes').textContent = likes;
-    miniature.querySelector('.picture__comments').textContent = comments;
-    picturesFragment.appendChild(miniature);
-  }
-  usersPictures.appendChild(picturesFragment);
+const renderThumbnails = function (posts) {
+  const thumbnailsFragment = document.createDocumentFragment();
+  posts.forEach((post) => {
+    const thumbnailElement = thumbnailTemplate.cloneNode(true);
+    thumbnailElement.querySelector('.picture__img').src = post.url;
+    thumbnailElement.querySelector('.picture__likes').textContent = post.likes;
+    thumbnailElement.querySelector('.picture__comments').textContent = post.comments.length;
+    thumbnailsFragment.appendChild(thumbnailElement);
+  });
+  thumbnailsContainer.appendChild(thumbnailsFragment);
 };
 
-export { drawMiniatures };
+export { renderThumbnails };

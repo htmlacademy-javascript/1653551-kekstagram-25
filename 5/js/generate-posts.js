@@ -1,5 +1,5 @@
 import {getRandomInteger} from './util.js';
-import {makeComment} from './generate-comments';
+import {makeComment} from './generate-comments.js';
 
 const POST_MIN_LIKES = 15;
 const POST_MAX_LIKES = 200;
@@ -18,4 +18,8 @@ const makePost = function (_, index) {
   };
 };
 
-export {makePost};
+const makePosts = function (postCount) {
+  return Array.from({ length: postCount }, makePost);
+};
+
+export {makePosts};
