@@ -45,4 +45,6 @@ const generateIntId = function (start = 0, maxStep = 1) {
   };
 };
 
-export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId};
+const isEscapeKey = (evt) => evt.key === 'Escape';
+
+export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId, isEscapeKey};
