@@ -3,8 +3,8 @@ import {makeComment} from './generate-comments.js';
 
 const POST_MIN_LIKES = 15;
 const POST_MAX_LIKES = 200;
-const COMMENT_MIN_COUNT = 1;
-const COMMENT_MAX_COUNT = 5;
+const COMMENT_MIN_COUNT = 10;
+const COMMENT_MAX_COUNT = 25;
 
 //Посты
 const makePost = function (_, index) {

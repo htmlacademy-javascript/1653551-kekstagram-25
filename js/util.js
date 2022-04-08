@@ -47,4 +47,6 @@ const generateIntId = function (start = 0, maxStep = 1) {
 
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId, isEscapeKey};
+const checkStringLength = (string = '', length = 0) => string.length <= length;
+
+export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId, isEscapeKey, checkStringLength};
