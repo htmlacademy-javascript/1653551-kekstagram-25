@@ -1,3 +1,4 @@
+// @ts-nocheck
 import { renderBigPicture } from './gallery.js';
 
 const thumbnailsContainer = document.querySelector('.pictures');
