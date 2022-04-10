@@ -49,4 +49,14 @@ const isEscapeKey = (evt) => evt.key === 'Escape';
 
 const checkStringLength = (string = '', length = 0) => string.length <= length;
 
-export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId, isEscapeKey, checkStringLength};
+const mathClamp = function (number, min, max) {
+  if (number < min) {
+    number = min;
+  }
+  if (number > max) {
+    number = max;
+  }
+  return number;
+};
+
+export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId, isEscapeKey, checkStringLength, mathClamp};
