@@ -1,28 +1,33 @@
 // @ts-nocheck
 import { isEscapeKey, checkStringLength } from './util.js';
 import { COMMENT_MAX_LENGTH } from './constants.js';
+import {enableFilters, disableFilters, makeScalable, makeUnscalable} from './filters.js';
 
 const HASHTAG_PATTERN = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const MAX_HASHTAGS = 5;
-
 
 const bodyElement = document.body;
 const uploadInputElement = document.querySelector('#upload-file');
 const modalContainer = document.querySelector('.img-upload__overlay');
 /** @type {HTMLFormElement} */
 const uploadForm = document.querySelector('.img-upload__form');
+const submitButton = uploadForm.querySelector('#upload-submit');
 const cancelButton = document.querySelector('#upload-cancel');
 
 const showModalHandler = function () {
   modalContainer.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onEscPress);
+  enableFilters();
+  makeScalable();
 };
 
 const closeModal = function () {
   modalContainer.classList.add('hidden');
   bodyElement.classList.remove('modal-open');
   document.removeEventListener('keydown', onEscPress);
+  disableFilters();
+  makeUnscalable();
   uploadForm.reset();
 };
 
@@ -107,11 +112,16 @@ cancelButton.addEventListener('click', () => {
   closeModal();
 });
 
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикуем...';
+};
 
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const isFormValid = pristine.validate();
   if (isFormValid) {
+    blockSubmitButton();
     uploadForm.submit();
   }
 });
