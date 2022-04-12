@@ -1,7 +1,9 @@
 // @ts-nocheck
 import { isEscapeKey, checkStringLength } from './util.js';
 import { COMMENT_MAX_LENGTH } from './constants.js';
-import {enableFilters, disableFilters, makeScalable, makeUnscalable} from './filters.js';
+import { enableFilters, disableFilters, makeScalable, makeUnscalable } from './filters.js';
+import { sendDataToServer } from './server-api.js';
+import { openUploadResultModal, UploudMessageModalType } from './upload-modals.js';
 
 const HASHTAG_PATTERN = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const MAX_HASHTAGS = 5;
@@ -117,13 +119,30 @@ const blockSubmitButton = () => {
   submitButton.textContent = 'Публикуем...';
 };
 
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
 uploadForm.addEventListener('submit', (evt) => {
   evt.preventDefault();
   const isFormValid = pristine.validate();
-  if (isFormValid) {
-    blockSubmitButton();
-    uploadForm.submit();
+  if (!isFormValid) {
+    return;
   }
+  blockSubmitButton();
+  const formData = new FormData(uploadForm);
+  const onSuccess = function () {
+    openUploadResultModal(UploudMessageModalType.SUCCESS);
+    unblockSubmitButton();
+    closeModal();
+  };
+  const onFailed = function () {
+    openUploadResultModal(UploudMessageModalType.ERROR);
+    unblockSubmitButton();
+    closeModal();
+  };
+  sendDataToServer(formData, onSuccess, onFailed );
 });
 
 export { bodyElement };

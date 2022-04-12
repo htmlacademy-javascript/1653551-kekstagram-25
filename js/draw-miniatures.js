@@ -22,3 +22,4 @@ const renderThumbnails = function (posts) {
 };
 
 export { renderThumbnails };
+

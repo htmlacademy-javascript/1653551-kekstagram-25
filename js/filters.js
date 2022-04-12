@@ -134,7 +134,7 @@ function enableFilters() {
   effectValueSlider.on('update', () => {
     const effectValue = effectValueSlider.get();
     const effectName = uploadForm.effect.value;
-    effectLevelInput.value = effectValue;
+    effectLevelInput.value = parseFloat(effectValue);
     if (uploadForm.effect.value === ImageEffect.NONE) {
       return;
     }
