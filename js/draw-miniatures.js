@@ -5,6 +5,12 @@ const thumbnailsContainer = document.querySelector('.pictures');
 const thumbnailTemplateElement = document.querySelector('#picture');
 const thumbnailTemplate = thumbnailTemplateElement.content.querySelector('.picture'); //копируем ссылку с классом picture из шаблона
 
+const clearThumbnails = function () {
+  thumbnailsContainer.querySelectorAll('.picture').forEach((thumbnailElement) => {
+    thumbnailElement.remove();
+  });
+};
+
 const renderThumbnails = function (posts) {
   const thumbnailsFragment = document.createDocumentFragment();
   posts.forEach((post) => {
@@ -21,5 +27,5 @@ const renderThumbnails = function (posts) {
   thumbnailsContainer.appendChild(thumbnailsFragment);
 };
 
-export { renderThumbnails };
+export { renderThumbnails, clearThumbnails };
 

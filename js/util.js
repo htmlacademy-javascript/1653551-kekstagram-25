@@ -59,4 +59,29 @@ const mathClamp = function (number, min, max) {
   return number;
 };
 
-export {getRandomInteger, getArrayRandomElement, shuffleArray, generateIntId, isEscapeKey, checkStringLength, mathClamp};
+const randomIntegersBetweenRange = function (count, min, max) {
+  const results = [];
+  for (let i = 0; i < count;) {
+    const randomInteger = getRandomInteger(min, max);
+    if (!results.includes(randomInteger)) {
+      results.push(randomInteger);
+      i++;
+    }
+  }
+  return results;
+};
+
+function debounce (callback, timeoutDelay = 500) {
+  let timeoutId;
+
+  return (...rest) => {
+    clearTimeout(timeoutId);
+    timeoutId = setTimeout(() => callback.apply(this, rest), timeoutDelay);
+  };
+}
+
+export {
+  getRandomInteger, getArrayRandomElement, shuffleArray,
+  generateIntId, isEscapeKey, checkStringLength, mathClamp,
+  randomIntegersBetweenRange, debounce
+};
