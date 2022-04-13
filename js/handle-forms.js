@@ -15,13 +15,20 @@ const modalContainer = document.querySelector('.img-upload__overlay');
 const uploadForm = document.querySelector('.img-upload__form');
 const submitButton = uploadForm.querySelector('#upload-submit');
 const cancelButton = document.querySelector('#upload-cancel');
+const previewImgElement = document.querySelector('.img-upload__preview img');
 
 const showModalHandler = function () {
+  const file = this.files[0];
   modalContainer.classList.remove('hidden');
   bodyElement.classList.add('modal-open');
   document.addEventListener('keydown', onEscPress);
   enableFilters();
   makeScalable();
+  const fileReader = new FileReader();
+  fileReader.onload = (evt) => {
+    previewImgElement.src = evt.target.result;
+  };
+  fileReader.readAsDataURL(file);
 };
 
 const closeModal = function () {

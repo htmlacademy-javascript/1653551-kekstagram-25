@@ -21,4 +21,4 @@ const onGetDataSuccess = (posts) => {
 };
 
 getDataFromServer(onGetDataSuccess, onGetDataError);
-
+//NB: Пристегнуть работу с комментами на делегаты
