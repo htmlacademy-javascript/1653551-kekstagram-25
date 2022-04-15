@@ -13,6 +13,12 @@ const likesCount = document.querySelector('.likes-count');
 const commentsCount = document.querySelector('.comments-count');
 let postComments = [];
 const socialCommentsShownCountElement = document.querySelector('.comments-shown');
+const picturesContainer = document.querySelector('.pictures');
+let posts = [];
+
+const initPosts = function (postsData) {
+  posts = postsData;
+};
 
 const renderComments = function (comments) {
   const pictureFragment = document.createDocumentFragment();
@@ -38,15 +44,15 @@ const loadComments = function () {
   }
 };
 
-const renderBigPicture = function (picture) {
+const renderBigPicture = function (post) {
   commentsLoader.classList.remove('hidden');
   bigPicture.classList.remove('hidden');
   body.classList.add('modal-open');
-  postComments = picture.comments;
-  bigPictureImage.src = picture.url;
-  likesCount.textContent = picture.likes;
-  commentsCount.textContent = picture.comments.length;
-  socialCaption.textContent = picture.description;
+  postComments = post.comments;
+  bigPictureImage.src = post.url;
+  likesCount.textContent = post.likes;
+  commentsCount.textContent = post.comments.length;
+  socialCaption.textContent = post.description;
   socialComments.innerHTML = '';
   loadComments();
 };
@@ -65,4 +71,17 @@ document.addEventListener('keydown', (evt) => {
 
 commentsLoader.addEventListener('click', loadComments);
 
-export { renderBigPicture };
+picturesContainer.addEventListener('click', (evt) => {
+  const pictureThumbnailElement = evt.target.closest('.picture');
+  if ( pictureThumbnailElement === null ) {
+    return;
+  }
+  evt.preventDefault();
+  const postId = parseInt(pictureThumbnailElement.dataset.postId, 10);
+  const post = posts.find((postData) => postData.id === postId);
+  if (post) {
+    renderBigPicture(post);
+  }
+});
+
+export { renderBigPicture, initPosts };

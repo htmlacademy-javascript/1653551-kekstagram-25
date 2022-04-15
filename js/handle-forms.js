@@ -1,17 +1,15 @@
-// @ts-nocheck
 import { isEscapeKey, checkStringLength } from './util.js';
-import { COMMENT_MAX_LENGTH } from './constants.js';
-import { enableFilters, disableFilters, makeScalable, makeUnscalable } from './filters.js';
+import { enableFilters, disableFilters, makeScalable, makeUnscalable } from './upload-image-filters.js';
 import { sendDataToServer } from './server-api.js';
 import { openUploadResultModal, UploudMessageModalType } from './upload-modals.js';
 
 const HASHTAG_PATTERN = /^#[A-Za-zА-Яа-яЁё0-9]{1,19}$/;
 const MAX_HASHTAGS = 5;
+const COMMENT_MAX_LENGTH = 140;
 
 const bodyElement = document.body;
 const uploadInputElement = document.querySelector('#upload-file');
 const modalContainer = document.querySelector('.img-upload__overlay');
-/** @type {HTMLFormElement} */
 const uploadForm = document.querySelector('.img-upload__form');
 const submitButton = uploadForm.querySelector('#upload-submit');
 const cancelButton = document.querySelector('#upload-cancel');
