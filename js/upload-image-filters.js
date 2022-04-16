@@ -1,10 +1,3 @@
-import { mathClamp } from './util.js';
-
-const PREVIEW_SCALE_STEP = 25;
-const PREVIEW_MIN_SCALE = 25;
-const PREVIEW_MAX_SCALE = 100;
-const PREVIEW_DEFAULT_SCALE = 100;
-
 const CssFilter = {
   NONE: '',
   GRAYSCALE: 'grayscale',
@@ -35,7 +28,6 @@ const ImageEffectFilter = {
 const effectLevelSliderContainer = document.querySelector('.effect-level__slider');
 const effectLevelInput = document.querySelector('.effect-level__value');
 const previewImgElement = document.querySelector('.img-upload__preview img');
-const scaleValueInput = document.querySelector('.scale__control--value');
 const imgEffectsFieldset = document.querySelector('.img-upload__effects');
 const uploadForm = document.querySelector('.img-upload__form');
 
@@ -156,35 +148,4 @@ function disableFilters() {
   effectValueSlider.destroy();
 }
 
-function getCurrentScale() {
-  return Number(scaleValueInput.value);
-}
-
-function setPreviewScale(scale) {
-  scale = mathClamp(scale, PREVIEW_MIN_SCALE, PREVIEW_MAX_SCALE);
-  scaleValueInput.value = `${scale}%`;
-  previewImgElement.style.transform = `scale(${scale/100})`;
-}
-
-function onScaleButtonClick(evt) {
-  const currentScale = getCurrentScale();
-  if (evt.target.classList.contains('scale__control--smaller')) {
-    setPreviewScale(currentScale + (PREVIEW_SCALE_STEP * -1));
-    return;
-  }
-  if (evt.target.classList.contains('scale__control--bigger')) {
-    setPreviewScale(currentScale + (PREVIEW_SCALE_STEP));
-  }
-}
-
-function makeScalable() {
-  setPreviewScale(PREVIEW_DEFAULT_SCALE);
-  document.querySelector('.img-upload__scale').addEventListener('click', onScaleButtonClick);
-}
-
-function makeUnscalable() {
-  setPreviewScale(PREVIEW_DEFAULT_SCALE);
-  document.querySelector('.img-upload__scale').removeEventListener('click', onScaleButtonClick);
-}
-
-export { enableFilters, disableFilters, makeScalable, makeUnscalable };
+export { enableFilters, disableFilters };

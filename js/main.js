@@ -1,8 +1,9 @@
-import { renderThumbnails, clearThumbnails } from './post-thumbnails.js';
-import './handle-forms.js';
-import { getDataFromServer } from './server-api.js';
-import { initFilterForm } from './post-filters.js';
-import { initPosts } from './gallery.js';
+import { renderThumbnails, clearThumbnails } from './posts-thumbnails.js';
+import { initPreviewScaleControlls } from './post-preview.js';
+import { getDataFromServer } from './api/services.js';
+import { initFilterForm } from './posts-thumbnails-filters.js';
+import { initPosts } from './post-fullscreen-view.js';
+import './post-send-form.js';
 
 const onGetDataSuccess = (posts) => {
   initPosts(posts);
@@ -13,4 +14,7 @@ const onGetDataSuccess = (posts) => {
   });
 };
 
+
 getDataFromServer(onGetDataSuccess, () => {});
+
+initPreviewScaleControlls();
