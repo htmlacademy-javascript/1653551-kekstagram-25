@@ -1,5 +1,7 @@
+import { BACKEND_URL } from './config.js';
+
 const getDataFromServer = (onSuccess, onFail) => {
-  fetch('https://25.javascript.pages.academy/kekstagram/data')
+  fetch(`${BACKEND_URL}/data`)
     .then((response) => {
       if (response.ok) {
         return response.json();
@@ -14,14 +16,11 @@ const getDataFromServer = (onSuccess, onFail) => {
     });
 };
 
-const sendDataToServer = ( formData, onSuccess, onFail ) => {
-  fetch(
-    'https://25.javascript.pages.academy/kekstagram',
-    {
-      method: 'POST',
-      body: formData,
-    }
-  )
+const sendDataToServer = (formData, onSuccess, onFail, onFinally) => {
+  fetch(BACKEND_URL, {
+    method: 'POST',
+    body: formData,
+  })
     .then((response) => {
       if (response.ok) {
         onSuccess();
@@ -31,6 +30,9 @@ const sendDataToServer = ( formData, onSuccess, onFail ) => {
     })
     .catch(() => {
       onFail('Не удалось отправить форму');
+    })
+    .finally(() => {
+      onFinally();
     });
 };
 

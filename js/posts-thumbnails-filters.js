@@ -1,9 +1,9 @@
-// @ts-nocheck
-import { randomIntegersBetweenRange, debounce } from './util.js';
-// @ts-nocheck
+import { debounce } from './utils/debounce.js';
+import { randomIntegersBetweenRange } from './utils/common.js';
+
+const POSTS_RANDOM_MAX_COUNT = 10;
 const filterFormButtonClass = 'img-filters__button';
 const filterFormActiveButtonClass = 'img-filters__button--active';
-/** @type {HTMLFormElement} */
 const filterForm = document.querySelector('.img-filters');
 const filterButtons = filterForm.querySelectorAll(`.${filterFormButtonClass}`);
 filterForm.classList.remove('img-filters--inactive');
@@ -33,17 +33,17 @@ const filterChange = function (evt, posts, cb) {
       break;
 
     case 'filter-random':
-      filteredPosts = filterPostsRandom(posts, 10);
+      filteredPosts = filterPostsRandom(posts, POSTS_RANDOM_MAX_COUNT);
       break;
 
     case 'filter-discussed':
       filteredPosts = filterPostsDiscussed(posts);
       break;
   }
-
   cb(filteredPosts);
 };
 const onFilterChange = debounce(filterChange);
+
 const initFilterForm = function (posts, cb) {
   const onFilterButtonClick = function (evt) {
     if (!evt.target.classList.contains(filterFormButtonClass)) {

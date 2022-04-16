@@ -1,18 +1,12 @@
-//import { makePosts } from './generate-posts.js';
-import { renderThumbnails, clearThumbnails } from './draw-miniatures.js';
-//import { POSTS_COUNT } from './constants.js';
-import './handle-forms.js';
-import './gallery.js';
-import './filters.js';
-import { getDataFromServer } from './server-api.js';
-import { initFilterForm } from './post-filters.js';
-
-//Основная логика
-//Запуск основной логики
-//renderThumbnails(makePosts(POSTS_COUNT));
-const onGetDataError = () => {};
+import { renderThumbnails, clearThumbnails } from './posts-thumbnails.js';
+import { initPreviewScaleControlls } from './post-preview.js';
+import { getDataFromServer } from './api/services.js';
+import { initFilterForm } from './posts-thumbnails-filters.js';
+import { initPosts } from './post-fullscreen-view.js';
+import './post-send-form.js';
 
 const onGetDataSuccess = (posts) => {
+  initPosts(posts);
   renderThumbnails(posts);
   initFilterForm(posts, (filteredPosts) => {
     clearThumbnails();
@@ -20,5 +14,7 @@ const onGetDataSuccess = (posts) => {
   });
 };
 
-getDataFromServer(onGetDataSuccess, onGetDataError);
-//NB: Пристегнуть работу с комментами на делегаты
+
+getDataFromServer(onGetDataSuccess, () => {});
+
+initPreviewScaleControlls();

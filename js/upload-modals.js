@@ -1,5 +1,4 @@
-// @ts-nocheck
-import { isEscapeKey } from './util.js';
+import { isEscapeKey } from './utils/common.js';
 
 const UploudMessageModalType = {
   SUCCESS: 'success',
