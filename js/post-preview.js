@@ -5,17 +5,18 @@ const PREVIEW_MIN_SCALE = 25;
 const PREVIEW_MAX_SCALE = 100;
 const PREVIEW_DEFAULT_SCALE = 100;
 
-const uploadImageScaleControllsContainer = document.querySelector('.img-upload__scale');
+const uploadImageScaleControllsContainerElement =
+  document.querySelector('.img-upload__scale');
 const previewImgElement = document.querySelector('.img-upload__preview img');
-const scaleValueInput = document.querySelector('.scale__control--value');
+const scaleValueInputElement = document.querySelector('.scale__control--value');
 
 function getCurrentScale() {
-  return parseInt(scaleValueInput.value, 10);
+  return parseInt(scaleValueInputElement.value, 10);
 }
 
 function setPreviewScale(scale) {
   scale = mathClamp(scale, PREVIEW_MIN_SCALE, PREVIEW_MAX_SCALE);
-  scaleValueInput.value = `${scale}%`;
+  scaleValueInputElement.value = `${scale}%`;
   previewImgElement.style.transform = `scale(${scale / 100})`;
 }
 
@@ -36,7 +37,7 @@ const resetPreviewScaleControlls = () => {
 
 const initPreviewScaleControlls = () => {
   resetPreviewScaleControlls();
-  uploadImageScaleControllsContainer.addEventListener('click', onChangeScaleClick);
+  uploadImageScaleControllsContainerElement.addEventListener('click', onChangeScaleClick);
 };
 
 export { initPreviewScaleControlls, resetPreviewScaleControlls };

@@ -3,10 +3,10 @@ import {
   enableFilters,
   disableFilters,
 } from './upload-image-filters.js';
-import { sendDataToServer } from './api/services.js';
+import { sendPost } from './api/services.js';
 import { openUploadResultModal, UploudMessageModalType } from './upload-modals.js';
 import { resetPreviewScaleControlls } from './post-preview.js';
-import { pristine } from './post-send-form-validate.js';
+import formValidator from './post-send-form-validate.js';
 
 const bodyElement = document.body;
 const uploadInputElement = document.querySelector('#upload-file');
@@ -20,7 +20,6 @@ const commentInput = document.querySelector('.text__description');
 
 // Признак текущей отправки формы создания нового поста
 let isUploadFormSending = false;
-
 
 const onShowPostUploadForm = function () {
   const file = this.files[0];
@@ -94,7 +93,7 @@ uploadForm.addEventListener('submit', (evt) => {
     return;
   }
   evt.preventDefault();
-  const isFormValid = pristine.validate();
+  const isFormValid = formValidator.validate();
   if (!isFormValid) {
     return;
   }
@@ -102,7 +101,7 @@ uploadForm.addEventListener('submit', (evt) => {
 
   blockSubmitButton();
   isUploadFormSending = true;
-  sendDataToServer(formData, onSendPostSuccess, onSendPostFailed, onSendPostFinnaly);
+  sendPost(formData, onSendPostSuccess, onSendPostFailed, onSendPostFinnaly);
 });
 
 

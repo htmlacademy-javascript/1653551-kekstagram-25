@@ -26,22 +26,27 @@ const POST_COMMENTS_CHUNK_MAX_LENGTH = 5;
 const body = document.body;
 
 const bigPictureElement = document.querySelector('.big-picture');
-const bigPictureImage = document.querySelector('.big-picture img');
-const bigPictureCloseButton = document.querySelector('.big-picture__cancel');
+const bigPictureImageElement = document.querySelector('.big-picture img');
+const bigPictureCloseButtonElement = document.querySelector('.big-picture__cancel');
 
-const likesCount = document.querySelector('.likes-count');
+const likesCountElement = document.querySelector('.likes-count');
 
-const socialCaption = document.querySelector('.social__caption');
-const socialComment = document.querySelector('.social__comment');
-const socialComments = document.querySelector('.social__comments');
-
-const commentsCount = document.querySelector('.comments-count');
-const commentsLoaderButton = document.querySelector('.comments-loader');
+const bigPictureSocialElement = document.querySelector('.big-picture__social');
+const socialCaptionElement = document.querySelector('.social__caption');
 
 const socialCommentsShownCountElement = document.querySelector('.comments-shown');
-const picturesContainer = document.querySelector('.pictures');
+const commentsCountElement = document.querySelector('.comments-count');
 
-const commentTemplateElement = socialComment.cloneNode(true);
+let socialCommentsContainerElement = document.querySelector('.social__comments');
+const emptyCommentsContainerElement = socialCommentsContainerElement.cloneNode();
+
+const socialCommentElement = document.querySelector('.social__comment');
+const commentTemplateElement = socialCommentElement.cloneNode(true);
+
+const commentsLoaderButtonElement = document.querySelector('.comments-loader');
+
+const picturesContainerElement = document.querySelector('.pictures');
+
 
 /** @type {Post[]} */
 let posts = [];
@@ -56,7 +61,7 @@ let postComments = [];
  * Инициализация постов полученных от сервера
  * @returns {void}
  */
-const initPosts = function (postsData) {
+const initPosts = (postsData) => {
   posts = postsData;
 };
 
@@ -81,12 +86,12 @@ const makeCommentElement = ({ avatar, name, message }) => {
  * @param {UserComment[]} - Массив комментариев к посту
  * @returns {void}
  */
-const renderPostComments = function (comments) {
+const renderPostComments = (comments) => {
   const pictureFragment = document.createDocumentFragment();
   comments.forEach((comment) => {
-    pictureFragment.appendChild(makeCommentElement(comment));
+    pictureFragment.append(makeCommentElement(comment));
   });
-  socialComments.append(pictureFragment);
+  socialCommentsContainerElement.append(pictureFragment);
 };
 
 /**
@@ -94,7 +99,7 @@ const renderPostComments = function (comments) {
  * @returns {void}
  */
 const showCommentsLoaderElement = () => {
-  commentsLoaderButton.classList.remove('hidden');
+  commentsLoaderButtonElement.classList.remove('hidden');
 };
 
 /**
@@ -102,7 +107,7 @@ const showCommentsLoaderElement = () => {
  * @returns {void}
  */
 const hideCommentsLoaderElement = () => {
-  commentsLoaderButton.classList.add('hidden');
+  commentsLoaderButtonElement.classList.add('hidden');
 };
 
 /**
@@ -110,9 +115,10 @@ const hideCommentsLoaderElement = () => {
  * Если комментарии закончились - прячем кнопку загрузки дополнительных комментариев
  * @returns {void}
  */
-const loadMorePostComments = function () {
+const onLoadMorePostComments = () => {
   renderPostComments(postComments.splice(0, POST_COMMENTS_CHUNK_MAX_LENGTH));
-  socialCommentsShownCountElement.textContent = socialComments.querySelectorAll('.social__comment').length;
+  socialCommentsShownCountElement.textContent =
+    socialCommentsContainerElement.querySelectorAll('.social__comment').length;
 
   if (!postComments.length) {
     hideCommentsLoaderElement();
@@ -124,11 +130,12 @@ const loadMorePostComments = function () {
  * @returns {void}
  */
 const clearPostCommentsContainer = () => {
-  socialComments
-    .querySelectorAll('.social__comment')
-    .forEach((commentElement) => {
-      commentElement.remove();
-    });
+  const newSocialCommentsContainerElement = emptyCommentsContainerElement.cloneNode();
+  bigPictureSocialElement.replaceChild(
+    newSocialCommentsContainerElement,
+    socialCommentsContainerElement
+  );
+  socialCommentsContainerElement = newSocialCommentsContainerElement;
 };
 
 /**
@@ -145,24 +152,24 @@ const hideFullScreenPostView = () => {
  * Отображение полной версии поста
  * @returns {void}
  */
-const showFullPost = function (post) {
+const showFullPost = (post) => {
   body.classList.add('modal-open');
 
   bigPictureElement.classList.remove('hidden');
 
-  postComments = post.comments;
+  postComments = [...post.comments];
 
-  bigPictureImage.src = post.url;
+  bigPictureImageElement.src = post.url;
 
-  likesCount.textContent = post.likes;
-  commentsCount.textContent = post.comments.length;
+  likesCountElement.textContent = post.likes;
+  commentsCountElement.textContent = post.comments.length;
 
-  socialCaption.textContent = post.description;
+  socialCaptionElement.textContent = post.description;
 
   clearPostCommentsContainer();
 
   showCommentsLoaderElement();
-  loadMorePostComments();
+  onLoadMorePostComments();
 
   document.addEventListener('keydown', onFullPostViewESCKeydown);
 };
@@ -178,12 +185,12 @@ function onFullPostViewESCKeydown (evt) {
 
 // #regionEventListeners
 // Обработчик клика на кнопку закрыть
-bigPictureCloseButton.addEventListener('click', () => {
+bigPictureCloseButtonElement.addEventListener('click', () => {
   hideFullScreenPostView();
 });
 
 // Обработчик кликов на превьюшки
-picturesContainer.addEventListener('click', (evt) => {
+picturesContainerElement.addEventListener('click', (evt) => {
   const pictureThumbnailElement = evt.target.closest('.picture');
   if (pictureThumbnailElement === null) {
     return;
@@ -197,7 +204,7 @@ picturesContainer.addEventListener('click', (evt) => {
 });
 
 // Обработчик клика на кнопку загрузки комментариев к посту
-commentsLoaderButton.addEventListener('click', loadMorePostComments);
+commentsLoaderButtonElement.addEventListener('click', onLoadMorePostComments);
 
 // #endregion
 

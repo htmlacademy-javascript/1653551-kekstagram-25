@@ -2,26 +2,26 @@ import { debounce } from './utils/debounce.js';
 import { randomIntegersBetweenRange } from './utils/common.js';
 
 const POSTS_RANDOM_MAX_COUNT = 10;
-const filterFormButtonClass = 'img-filters__button';
+
 const filterFormActiveButtonClass = 'img-filters__button--active';
-const filterForm = document.querySelector('.img-filters');
-const filterButtons = filterForm.querySelectorAll(`.${filterFormButtonClass}`);
-filterForm.classList.remove('img-filters--inactive');
 
-const filterPostsDefault = function (posts) {
-  return posts;
+const filterFormContainerElement = document.querySelector('.img-filters');
+const filterFormElement = document.querySelector('.img-filters__form');
+
+const filterPostsDefault = (posts) => posts;
+
+const filterPostsRandom = (posts, maxCount) => {
+  const startIndex = 0;
+  const lastIndex = posts.length - 1;
+  const elementsCount = Math.min(posts.length, maxCount);
+  const randomPostsIndexes = randomIntegersBetweenRange(startIndex, lastIndex, elementsCount);
+  return randomPostsIndexes.map((index) => posts[index]);
 };
 
-const filterPostsRandom = function (posts, maxCount) {
-  const indexes = randomIntegersBetweenRange(Math.min(posts.length, maxCount), 0, posts.length - 1);
-  return indexes.map((index) => posts[index]);
-};
+const filterPostsDiscussed = (posts) =>
+  [...posts].sort((prevPost, nextPost) => nextPost.comments.length - prevPost.comments.length);
 
-const filterPostsDiscussed = function (posts) {
-  return [...posts].sort((prevPost, nextPost) => nextPost.comments.length - prevPost.comments.length);
-};
-
-const filterChange = function (evt, posts, cb) {
+const filterChange = (evt, posts, cb) => {
   const target = evt.target;
 
   const filterName = target.id;
@@ -44,19 +44,26 @@ const filterChange = function (evt, posts, cb) {
 };
 const onFilterChange = debounce(filterChange);
 
-const initFilterForm = function (posts, cb) {
-  const onFilterButtonClick = function (evt) {
-    if (!evt.target.classList.contains(filterFormButtonClass)) {
+const initFilterForm = (posts, cb) => {
+  const onFilterButtonClick = (evt) => {
+    if (!evt.target.classList.contains('img-filters__button')) {
       return;
     }
-    filterButtons.forEach((filterButton) => {
-      filterButton.classList.remove(filterFormActiveButtonClass);
-    });
+
+    const activeButtonElement = filterFormElement.querySelector(`.${filterFormActiveButtonClass}`);
+    if (activeButtonElement) {
+      activeButtonElement.classList.remove(filterFormActiveButtonClass);
+    }
+
     evt.target.classList.add(filterFormActiveButtonClass);
+
     onFilterChange.call(this, evt, posts, cb);
   };
-  filterForm.removeEventListener('click', onFilterButtonClick);
-  filterForm.addEventListener('click', onFilterButtonClick);
+
+  filterFormElement.removeEventListener('click', onFilterButtonClick);
+  filterFormElement.addEventListener('click', onFilterButtonClick);
+
+  filterFormContainerElement.classList.remove('img-filters--inactive');
 };
 
 export { initFilterForm };
