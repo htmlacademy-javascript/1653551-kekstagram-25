@@ -25,11 +25,14 @@ const ImageEffectFilter = {
   [ImageEffect.HEAT]: CssFilter.BRIGHTNESS
 };
 
-const effectLevelSliderContainer = document.querySelector('.effect-level__slider');
-const effectLevelInput = document.querySelector('.effect-level__value');
+const effectSliderContainerElement = document.querySelector('.img-upload__effect-level');
+const effectSliderElement = document.querySelector('.effect-level__slider');
+const effectLevelInputElement = document.querySelector('.effect-level__value');
 const previewImgElement = document.querySelector('.img-upload__preview img');
-const imgEffectsFieldset = document.querySelector('.img-upload__effects');
-const uploadForm = document.querySelector('.img-upload__form');
+const imgEffectsFieldsetElement = document.querySelector(
+  '.img-upload__effects'
+);
+const uploadFormElement = document.querySelector('.img-upload__form');
 
 let effectValueSlider = null;
 
@@ -82,10 +85,10 @@ const sliderFilterSettings = {
 };
 
 const showEffectSlider = () => {
-  effectLevelSliderContainer.removeAttribute('hidden', true);
+  effectSliderContainerElement.classList.remove('hidden');
 };
 const hideEffectSlider = () => {
-  effectLevelSliderContainer.setAttribute('hidden', true);
+  effectSliderContainerElement.classList.add('hidden');
 };
 
 const updatePreviewImgClass = (filterName) => {
@@ -97,7 +100,7 @@ const updatePreviewImgEffect = (effectName, effectValue) => {
     `${ImageEffectFilter[effectName]}(${effectValue})` : '';
 };
 
-const onFilterChange = function (evt) {
+const onFilterChange = (evt) => {
   const filterName = evt.target.value;
   const sliderSettings = sliderFilterSettings[filterName];
   updatePreviewImgClass(filterName);
@@ -111,11 +114,11 @@ const onFilterChange = function (evt) {
   hideEffectSlider();
 };
 
-const enableFilters = function () {
-  effectLevelInput.value = 1;
+const enableFilters = () => {
+  effectLevelInputElement.value = 1;
   hideEffectSlider();
   effectValueSlider = noUiSlider.create(
-    effectLevelSliderContainer,
+    effectSliderElement,
     {
       range: { min: 0, max: 1, },
       start: 1,
@@ -130,22 +133,22 @@ const enableFilters = function () {
 
   effectValueSlider.on('update', () => {
     const effectValue = effectValueSlider.get();
-    const effectName = uploadForm.effect.value;
-    effectLevelInput.value = parseFloat(effectValue);
-    if (uploadForm.effect.value === ImageEffect.NONE) {
+    const effectName = uploadFormElement.effect.value;
+    effectLevelInputElement.value = parseFloat(effectValue);
+    if (uploadFormElement.effect.value === ImageEffect.NONE) {
       return;
     }
     updatePreviewImgEffect(effectName, effectValue);
   });
-  imgEffectsFieldset.addEventListener('change', onFilterChange);
+  imgEffectsFieldsetElement.addEventListener('change', onFilterChange);
 };
 
-function disableFilters() {
-  imgEffectsFieldset.removeEventListener('change', onFilterChange);
+const disableFilters = () => {
+  imgEffectsFieldsetElement.removeEventListener('change', onFilterChange);
   updatePreviewImgClass();
   updatePreviewImgEffect();
-  uploadForm.effect.value = ImageEffect.NONE;
+  uploadFormElement.effect.value = ImageEffect.NONE;
   effectValueSlider.destroy();
-}
+};
 
 export { enableFilters, disableFilters };

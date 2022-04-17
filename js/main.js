@@ -1,11 +1,11 @@
-import { renderThumbnails, clearThumbnails } from './posts-thumbnails.js';
+import { getPosts } from './api/services.js';
 import { initPreviewScaleControlls } from './post-preview.js';
-import { getDataFromServer } from './api/services.js';
-import { initFilterForm } from './posts-thumbnails-filters.js';
 import { initPosts } from './post-fullscreen-view.js';
+import { renderThumbnails, clearThumbnails } from './posts-thumbnails.js';
+import { initFilterForm } from './posts-thumbnails-filters.js';
 import './post-send-form.js';
 
-const onGetDataSuccess = (posts) => {
+const onGetPostsDataSuccess = (posts) => {
   initPosts(posts);
   renderThumbnails(posts);
   initFilterForm(posts, (filteredPosts) => {
@@ -14,7 +14,6 @@ const onGetDataSuccess = (posts) => {
   });
 };
 
-
-getDataFromServer(onGetDataSuccess, () => {});
-
 initPreviewScaleControlls();
+
+getPosts(onGetPostsDataSuccess);

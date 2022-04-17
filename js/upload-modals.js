@@ -10,19 +10,33 @@ const modalTemplateSelector = {
   [UploudMessageModalType.ERROR]: '#error'
 };
 
+const modalTypes = Object.values(UploudMessageModalType);
+
 const openUploadResultModal = (modalType) => {
-  if (!Object.values(UploudMessageModalType).includes(modalType)) {
+  if (!modalTypes.includes(modalType)) {
     return;
   }
 
   const templateSelector = modalTemplateSelector[modalType];
-  const template = document.querySelector(templateSelector);
-  const modal = template.content.firstElementChild.cloneNode(true);
-  const innerElement = modal.querySelector(`.${modalType}__inner`);
-  const closeButton = modal.querySelector(`.${modalType}__button`);
+  const templateElement = document.querySelector(templateSelector);
+  const modalElement = templateElement.content.firstElementChild.cloneNode(true);
+  const modalContentElement = modalElement.querySelector(`.${modalType}__inner`);
+  const modalCloseButtonElement = modalElement.querySelector(`.${modalType}__button`);
 
-  const closeModal = function () {
-    modal.remove();
+  const closeModal = () => {
+    modalElement.removeEventListener('click', onOutsideClick);
+    modalElement.remove();
+  };
+
+  function onOutsideClick (evt) {
+    if (evt.composedPath().includes(modalContentElement)) {
+      return;
+    }
+    closeModal();
+  }
+
+  const onModalClose = () => {
+    closeModal();
   };
 
   document.addEventListener('keydown', (evt) => {
@@ -31,16 +45,13 @@ const openUploadResultModal = (modalType) => {
     }
   }, { once: true });
 
-  modal.addEventListener('click', (evt) => {
-    if (evt.composedPath().includes(innerElement)) {
-      return;
-    }
-    closeModal();
-  }, { once: true });
+  modalElement.addEventListener('click', onOutsideClick);
 
-  closeButton.addEventListener('click', closeModal, { once: true });
+  modalCloseButtonElement.addEventListener('click', onModalClose, {
+    once: true,
+  });
 
-  document.body.append(modal);
+  document.body.append(modalElement);
 };
 
 export { openUploadResultModal, UploudMessageModalType };
